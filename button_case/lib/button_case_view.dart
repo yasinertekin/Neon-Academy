@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 final class ButtonCaseView extends StatefulWidget {
@@ -126,6 +127,9 @@ class _ButtonCaseViewState extends State<ButtonCaseView> {
                 ],
               ),
             ),
+            ShakeButton(
+              onPressed: () {},
+            ),
             Center(
               child: PopupMenuButton<String>(
                 itemBuilder: (BuildContext context) {
@@ -152,6 +156,76 @@ class _ButtonCaseViewState extends State<ButtonCaseView> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ShakeButton extends StatefulWidget {
+  final VoidCallback onPressed;
+
+  const ShakeButton({super.key, required this.onPressed});
+
+  @override
+  _ShakeButtonState createState() => _ShakeButtonState();
+}
+
+class _ShakeButtonState extends State<ShakeButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        widget.onPressed();
+        _animationController.forward(from: 0.0);
+        // Ses çalma işlemi
+        final player = AudioPlayer();
+        player.play(
+          UrlSource(
+              'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'),
+        );
+        setState(() {});
+      },
+      child: AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) {
+          return Transform.translate(
+            offset: Offset(0.0, _animationController.value * 10),
+            child: child,
+          );
+        },
+        child: Container(
+          padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color:
+                _animationController.isAnimating ? Colors.green : Colors.blue,
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: const Text(
+            'Soygun Düğmesi',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
     );
