@@ -133,3 +133,36 @@ final class _SmartHomeCardState extends State<_SmartHomeCard> {
     );
   }
 }
+
+class CustomStepper extends StatelessWidget {
+  const CustomStepper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stepper(
+        stepIconBuilder: (context, index) {
+          return const Icon(Icons.home);
+        },
+        connectorThickness: 5,
+        elevation: 5,
+        //margin: const EdgeInsets.all(10),
+        currentStep: 1,
+        onStepCancel: () {},
+        onStepContinue: () {},
+        onStepTapped: (int index) {},
+        connectorColor: const MaterialStatePropertyAll(Colors.deepPurple),
+        steps: const <Step>[
+          Step(
+            title: Text('Step 1'),
+            content: Text('Content for Step 1'),
+          ),
+          Step(
+            title: Text('Step 2'),
+            content: Text('Content for Step 2'),
+          ),
+        ],
+      ),
+    );
+  }
+}

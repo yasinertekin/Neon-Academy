@@ -7,11 +7,12 @@ final class CustomSliderView extends StatefulWidget {
   State<CustomSliderView> createState() => _CustomSliderViewState();
 }
 
-class _CustomSliderViewState extends State<CustomSliderView> {
+final class _CustomSliderViewState extends State<CustomSliderView> {
   double _sliderValue = 0.0;
   final int _minValue = 0;
   final int _maxValue = 100;
   final int _divisions = 100;
+  final imagePath = 'assets/img_dragon.png';
 
   @override
   Widget build(BuildContext context) {
@@ -24,31 +25,42 @@ class _CustomSliderViewState extends State<CustomSliderView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SliderTheme(
-              data: SliderTheme.of(context).copyWith(
-                activeTrackColor: Colors.red,
-                inactiveTrackColor: Colors.green,
-                thumbColor: Colors.blue,
-                overlayColor: Colors.blue.withAlpha(32),
-                thumbShape:
-                    const RoundSliderThumbShape(enabledThumbRadius: 10.0),
-                overlayShape:
-                    const RoundSliderOverlayShape(overlayRadius: 20.0),
-              ),
-              child: Slider(
-                value: _sliderValue,
-                min: _minValue.toDouble(),
-                max: _maxValue.toDouble(),
-                divisions: _divisions,
-                onChanged: (newValue) {
-                  setState(() {
-                    _sliderValue = newValue;
-                  });
-                },
-              ),
+            _DragonImage(imagePath: imagePath, sliderValue: _sliderValue),
+            Slider(
+              value: _sliderValue,
+              min: _minValue.toDouble(),
+              max: _maxValue.toDouble(),
+              divisions: _divisions,
+              onChanged: (newValue) {
+                setState(() {
+                  _sliderValue = newValue;
+                });
+              },
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+final class _DragonImage extends StatelessWidget {
+  const _DragonImage({
+    required this.imagePath,
+    required double sliderValue,
+  }) : _sliderValue = sliderValue;
+
+  final String imagePath;
+  final double _sliderValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(
+      imagePath,
+      color: Color.lerp(
+        Colors.green,
+        Colors.red,
+        _sliderValue / 100,
       ),
     );
   }

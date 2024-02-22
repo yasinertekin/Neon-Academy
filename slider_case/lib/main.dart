@@ -6,7 +6,7 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+final class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
@@ -15,6 +15,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        sliderTheme: SliderThemeData(
+          activeTrackColor: Colors.green,
+          inactiveTrackColor: Colors.red,
+          trackShape: const RectangularSliderTrackShape(),
+          trackHeight: 4.0,
+          thumbColor: Colors.blue,
+          thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12.0),
+          overlayColor: Colors.purple.withAlpha(32),
+          overlayShape: const RoundSliderOverlayShape(overlayRadius: 28.0),
+        ),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
