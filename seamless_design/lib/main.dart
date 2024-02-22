@@ -1,8 +1,13 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:seamless_design/view/home_view.dart';
 
 void main() {
-  runApp(const _MyApp());
+  runApp(
+    DevicePreview(
+      builder: (context) => const _MyApp(), // Wrap your app
+    ),
+  );
 }
 
 final class _MyApp extends StatelessWidget {
@@ -12,11 +17,11 @@ final class _MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      useInheritedMediaQuery: true,
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
       home: const HomeView(),
     );
   }

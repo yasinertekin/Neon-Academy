@@ -29,15 +29,18 @@ final class _DestinationList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+          ),
+          itemCount: Destinations.all.length,
+          itemBuilder: (BuildContext context, int index) {
+            final destination = Destinations.all[index];
+            return _DestinationCard(destination: destination);
+          },
         ),
-        itemCount: Destinations.all.length,
-        itemBuilder: (BuildContext context, int index) {
-          final destination = Destinations.all[index];
-          return _DestinationCard(destination: destination);
-        },
       ),
     );
   }
