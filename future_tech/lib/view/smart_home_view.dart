@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:future_tech/model/smart_home.dart';
 import 'package:future_tech/model/smart_home_category.dart';
 import 'package:future_tech/view/mixin/smart_home_mixin.dart';
+import 'package:intl/intl.dart';
 
 /// SmartHomeView
 final class SmartHomeView extends StatefulWidget {
@@ -39,10 +40,18 @@ final class _SmartHomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
+    final formattedDate = DateFormat('yyyy-MM-dd').format(now);
+
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       appBar: AppBar(
-        title: const Text('Smart Home'),
+        title: const Text('Future Tech'),
+        actions: [
+          Text(
+            formattedDate,
+          ),
+        ],
         bottom: TabBar(
           controller: tabController,
           tabs: tabViews,
@@ -104,64 +113,36 @@ final class _SmartHomeCard extends StatefulWidget {
 final class _SmartHomeCardState extends State<_SmartHomeCard> {
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      trailing: IconButton(
-        icon: widget.smartHome.isOpen
-            ? const Icon(
-                Icons.power_settings_new,
-                color: Colors.red,
-              )
-            : const Icon(
-                Icons.power_settings_new_outlined,
-                color: Colors.grey,
-              ),
-        onPressed: () {
-          setState(() {
-            widget.smartHome = widget.smartHome.copyWith(
-              isOpen: !widget.smartHome.isOpen,
-            );
-          });
-        },
-      ),
-      leading: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Image.asset(
-          widget.smartHome.image,
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Container(
+        child: ListTile(
+          trailing: IconButton(
+            icon: widget.smartHome.isOpen
+                ? const Icon(
+                    Icons.power_settings_new,
+                    color: Colors.red,
+                  )
+                : const Icon(
+                    Icons.power_settings_new_outlined,
+                    color: Colors.grey,
+                  ),
+            onPressed: () {
+              setState(() {
+                widget.smartHome = widget.smartHome.copyWith(
+                  isOpen: !widget.smartHome.isOpen,
+                );
+              });
+            },
+          ),
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
+              widget.smartHome.image,
+            ),
+          ),
+          title: Text(widget.smartHome.name),
         ),
-      ),
-      title: Text(widget.smartHome.name),
-    );
-  }
-}
-
-class CustomStepper extends StatelessWidget {
-  const CustomStepper({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stepper(
-        stepIconBuilder: (context, index) {
-          return const Icon(Icons.home);
-        },
-        connectorThickness: 5,
-        elevation: 5,
-        //margin: const EdgeInsets.all(10),
-        currentStep: 1,
-        onStepCancel: () {},
-        onStepContinue: () {},
-        onStepTapped: (int index) {},
-        connectorColor: const MaterialStatePropertyAll(Colors.deepPurple),
-        steps: const <Step>[
-          Step(
-            title: Text('Step 1'),
-            content: Text('Content for Step 1'),
-          ),
-          Step(
-            title: Text('Step 2'),
-            content: Text('Content for Step 2'),
-          ),
-        ],
       ),
     );
   }

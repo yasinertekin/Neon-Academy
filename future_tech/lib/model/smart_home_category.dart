@@ -21,9 +21,9 @@ final class SmartHomeCategoryList {
 
   /// SmartHomeCategoryList items
   static final List<SmartHomeCategory> items = [
-    const SmartHomeCategory(name: 'Security'),
-    const SmartHomeCategory(name: 'Lighting'),
-    const SmartHomeCategory(name: 'Thermostat'),
-    const SmartHomeCategory(name: 'Cameras'),
+    const SmartHomeCategory(name: 'Living Room'),
+    const SmartHomeCategory(name: 'Bathroom'),
+    const SmartHomeCategory(name: 'Kitchen'),
+    const SmartHomeCategory(name: 'Bedroom'),
   ];
 }

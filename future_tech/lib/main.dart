@@ -19,7 +19,7 @@ final class _MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const CustomStepper(),
+      home: const SmartHomeView(),
     );
   }
 }

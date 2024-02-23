@@ -50,30 +50,62 @@ final class SmartHomeList {
   static final List<SmartHome> items = [
     const SmartHome(
       name: 'Smart Security',
+      isOpen: true,
       image: 'assets/images/smart_security.jpg',
       category: SmartHomeCategory(
-        name: 'Security',
+        name: 'Living Room',
+      ),
+    ),
+    const SmartHome(
+      name: 'Smart Security',
+      image: 'assets/images/smart_security.jpg',
+      category: SmartHomeCategory(
+        name: 'Living Room',
       ),
     ),
     const SmartHome(
       name: 'Smart Lighting',
       image: 'assets/images/smart_lighting.jpg',
       category: SmartHomeCategory(
-        name: 'Lighting',
+        name: 'Bathroom',
+      ),
+    ),
+    const SmartHome(
+      name: 'Smart Lighting',
+      isOpen: true,
+      image: 'assets/images/smart_lighting.jpg',
+      category: SmartHomeCategory(
+        name: 'Bathroom',
       ),
     ),
     const SmartHome(
       name: 'Smart Thermostat',
       image: 'assets/images/smart_thermostat.jpg',
       category: SmartHomeCategory(
-        name: 'Thermostat',
+        name: 'Kitchen',
+      ),
+    ),
+    const SmartHome(
+      isOpen: true,
+      name: 'Smart Thermostat',
+      image: 'assets/images/smart_thermostat.jpg',
+      category: SmartHomeCategory(
+        name: 'Kitchen',
       ),
     ),
     const SmartHome(
       name: 'Smart Cameras',
       image: 'assets/images/smart_cameras.jpg',
       category: SmartHomeCategory(
-        name: 'Cameras',
+        name: 'Bedroom',
+      ),
+    ),
+    const SmartHome(
+      isOpen: true,
+      name: 'Smart Cameras',
+      image: 'assets/images/smart_cameras.jpg',
+      category: SmartHomeCategory(
+        name: 'Bedroom',
       ),
     ),
   ];
