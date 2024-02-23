@@ -10,12 +10,21 @@ final class CustomStepperView extends StatelessWidget {
     return Scaffold(
       body: ListenableBuilder(
         listenable: counterViewModel,
-        builder: (context, child) => Column(
-          children: [
-            _CustomStepper(
-                counterViewModel: counterViewModel, stepList: stepList),
-            Text('Counter: ${counterViewModel.counter}'),
-          ],
+        builder: (context, child) => SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 100,
+              ),
+              Text(
+                'Current Step: ${counterViewModel.counter + 1}',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              _CustomStepper(
+                  counterViewModel: counterViewModel, stepList: stepList),
+            ],
+          ),
         ),
       ),
     );
@@ -33,34 +42,46 @@ final class _CustomStepper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<StepList> fiftySteps = [];
+
+    for (int i = 1; i <= 50; i++) {
+      fiftySteps.add(
+        StepList(
+          title: 'Step $i',
+          content: 'Content for Step $i',
+        ),
+      );
+    }
+
     return ColoredBox(
       color: Colors.pink,
       child: Stepper(
-        stepIconBuilder: (context, index) {
-          return const Icon(Icons.star);
-        },
-        controlsBuilder:
-            (BuildContext context, ControlsDetails controlsDetails) {
-          return _CustomControls(
-            controlsDetails: controlsDetails,
-          );
-        },
-        onStepContinue: () {
-          counterViewModel.incrementCounter();
-        },
-        onStepCancel: () {
-          counterViewModel.decrementCounter();
-        },
-        currentStep: 0,
-        physics: const NeverScrollableScrollPhysics(),
-        connectorColor: const MaterialStatePropertyAll(Colors.blueAccent),
-        steps: stepList
-            .map((StepList step) => Step(
+          stepIconBuilder: (context, index) {
+            return const Icon(Icons.star);
+          },
+          controlsBuilder:
+              (BuildContext context, ControlsDetails controlsDetails) {
+            return _CustomControls(
+              controlsDetails: controlsDetails,
+            );
+          },
+          onStepContinue: () {
+            counterViewModel.incrementCounter();
+          },
+          onStepCancel: () {
+            counterViewModel.decrementCounter();
+          },
+          currentStep: counterViewModel.counter,
+          physics: const NeverScrollableScrollPhysics(),
+          connectorColor: const MaterialStatePropertyAll(Colors.blueAccent),
+          steps: fiftySteps
+              .map(
+                (step) => Step(
                   title: Text(step.title),
                   content: Text(step.content),
-                ))
-            .toList(),
-      ),
+                ),
+              )
+              .toList()),
     );
   }
 }
@@ -133,7 +154,7 @@ final class CounterViewModel extends ChangeNotifier {
   int get counter => _counter;
 
   void incrementCounter() {
-    if (_counter < 50) {
+    if (_counter < 45) {
       _counter += 5;
     }
     notifyListeners();
