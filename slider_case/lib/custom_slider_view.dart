@@ -26,7 +26,7 @@ final class _CustomSliderViewState extends State<CustomSliderView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _DragonImage(imagePath: imagePath, sliderValue: _sliderValue),
-            Text('Slider Value: ${_sliderValue.toInt()}'),
+            _SliderValue(sliderValue: _sliderValue),
             Slider(
               value: _sliderValue,
               min: _minValue.toDouble(),
@@ -42,6 +42,19 @@ final class _CustomSliderViewState extends State<CustomSliderView> {
         ),
       ),
     );
+  }
+}
+
+final class _SliderValue extends StatelessWidget {
+  const _SliderValue({
+    required double sliderValue,
+  }) : _sliderValue = sliderValue;
+
+  final double _sliderValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('Slider Value: ${_sliderValue.toInt()}');
   }
 }
 
