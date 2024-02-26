@@ -110,8 +110,10 @@ final class StepList {
   /// Background Color
   final Color backgroundColor;
 
+  /// Icon
   final IconData icon;
 
+  /// Steps
   static const List<StepList> steps = <StepList>[
     StepList(
       title: 'Step 1',
