@@ -12,6 +12,7 @@ final class PageModel {
     required this.icon,
     required this.type,
     required this.backgroundColor,
+    required this.imagePath,
     this.isImage = false,
   });
 
@@ -32,6 +33,9 @@ final class PageModel {
 
   /// isImage
   final bool isImage;
+
+  /// imagePath
+  final String imagePath;
 }
 
 @immutable
@@ -46,6 +50,7 @@ final class PageModelList {
       icon: Icons.looks_one_sharp,
       type: CustomPageViewType.one,
       backgroundColor: Colors.red,
+      imagePath: 'assets/img_dog.png',
     ),
     const PageModel(
       title: 'Page 2',
@@ -53,6 +58,7 @@ final class PageModelList {
       icon: Icons.looks_two_sharp,
       type: CustomPageViewType.two,
       backgroundColor: Colors.blue,
+      imagePath: 'assets/img_dog_two.png',
     ),
     const PageModel(
       title: 'Page 3',
@@ -60,6 +66,7 @@ final class PageModelList {
       icon: Icons.looks_3_sharp,
       type: CustomPageViewType.three,
       backgroundColor: Colors.green,
+      imagePath: 'assets/img_dog_three.png',
     ),
   ];
 }

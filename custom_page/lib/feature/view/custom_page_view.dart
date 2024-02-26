@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 part 'widget/current_page_image.dart';
 part 'widget/page_description.dart';
 part 'widget/page_icon.dart';
+part 'widget/page_image.dart';
 part 'widget/page_title.dart';
 
 /// A [PageView] that displays a list of pages.
@@ -58,10 +59,7 @@ final class _PageViewBody extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (viewModel.currentPage == page.type)
-              const _CurrentPageImage()
-            else
-              const SizedBox.shrink(),
+            _PageImage(page: page),
             _PageTitle(page: page),
             _PageDescription(page: page),
             _PageIcon(page: page),
