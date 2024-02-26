@@ -26,6 +26,7 @@ final class _CustomSliderViewState extends State<CustomSliderView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _DragonImage(imagePath: imagePath, sliderValue: _sliderValue),
+            Text('Slider Value: ${_sliderValue.toInt()}'),
             Slider(
               value: _sliderValue,
               min: _minValue.toDouble(),
