@@ -1,169 +1,212 @@
 import 'package:flutter/material.dart';
+import 'package:stepper/custom_stepper_mixin.dart';
 
-final class CustomStepperView extends StatelessWidget {
-  const CustomStepperView({super.key});
+/// Custom Stepper View
+final class CustomStepperView extends StatelessWidget with CustomStepperMixin {
+  /// Custom Stepper View
+  CustomStepperView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const stepList = StepList.steps;
-    final counterViewModel = CounterViewModel();
-    return Scaffold(
-      body: ListenableBuilder(
-        listenable: counterViewModel,
-        builder: (context, child) => SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 100,
+    return ListenableBuilder(
+      listenable: counterViewModel,
+      builder: (context, child) => Scaffold(
+        appBar: _CustomStepperViewAppBar(counterViewModel: counterViewModel),
+        body: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: stepList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final step = stepList[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: ListTile(
+                      tileColor: getTileColor(index),
+                      title: Text(step.title),
+                      subtitle: Text(step.content),
+                      leading: Icon(step.icon),
+                      onTap: () {},
+                    ),
+                  );
+                },
               ),
-              Text(
-                'Current Step: ${counterViewModel.counter + 1}',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              _CustomStepper(
-                  counterViewModel: counterViewModel, stepList: stepList),
-            ],
-          ),
+            ),
+            _Buttons(counterViewModel: counterViewModel),
+          ],
         ),
       ),
     );
   }
 }
 
-final class _CustomStepper extends StatelessWidget {
-  const _CustomStepper({
+final class _Buttons extends StatelessWidget {
+  const _Buttons({
     required this.counterViewModel,
-    required this.stepList,
   });
 
   final CounterViewModel counterViewModel;
-  final List<StepList> stepList;
-
-  @override
-  Widget build(BuildContext context) {
-    List<StepList> fiftySteps = [];
-
-    for (int i = 1; i <= 50; i++) {
-      fiftySteps.add(
-        StepList(
-          title: 'Step $i',
-          content: 'Content for Step $i',
-        ),
-      );
-    }
-
-    return ColoredBox(
-      color: Colors.pink,
-      child: Stepper(
-          stepIconBuilder: (context, index) {
-            return const Icon(Icons.star);
-          },
-          controlsBuilder:
-              (BuildContext context, ControlsDetails controlsDetails) {
-            return _CustomControls(
-              controlsDetails: controlsDetails,
-            );
-          },
-          onStepContinue: () {
-            counterViewModel.incrementCounter();
-          },
-          onStepCancel: () {
-            counterViewModel.decrementCounter();
-          },
-          currentStep: counterViewModel.counter,
-          physics: const NeverScrollableScrollPhysics(),
-          connectorColor: const MaterialStatePropertyAll(Colors.blueAccent),
-          steps: fiftySteps
-              .map(
-                (step) => Step(
-                  title: Text(step.title),
-                  content: Text(step.content),
-                ),
-              )
-              .toList()),
-    );
-  }
-}
-
-final class _CustomControls extends StatelessWidget {
-  const _CustomControls({
-    required this.controlsDetails,
-  });
-
-  final ControlsDetails controlsDetails;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <GestureDetector>[
-        GestureDetector(
-          onTap: controlsDetails.onStepContinue,
-          child: const _CustomImage(
-            imageUrl: 'https://picsum.photos/id/237/200/300',
-          ),
+      children: [
+        ElevatedButton(
+          onPressed: counterViewModel.increment,
+          child: const Text('Next'),
         ),
-        GestureDetector(
-          onTap: controlsDetails.onStepCancel,
-          child: const _CustomImage(),
+        ElevatedButton(
+          onPressed: counterViewModel.decrement,
+          child: const Text('Back'),
         ),
       ],
     );
   }
 }
 
-final class _CustomImage extends StatelessWidget {
-  const _CustomImage({
-    this.imageUrl = 'https://picsum.photos/200/300',
+final class _CustomStepperViewAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
+  const _CustomStepperViewAppBar({
+    required this.counterViewModel,
   });
 
-  final String imageUrl;
+  final CounterViewModel counterViewModel;
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(25),
-      child: Image.network(
-        imageUrl,
-        width: 100,
-        fit: BoxFit.fill,
-        height: 100,
-      ),
+    return AppBar(
+      actions: [
+        Text(
+          'Counter: ${counterViewModel.counter}',
+          style: const TextStyle(fontSize: 20),
+        ),
+      ],
     );
   }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
 @immutable
+
+/// Step List
 final class StepList {
+  /// Step List
+  const StepList({
+    required this.title,
+    required this.icon,
+    required this.content,
+    this.backgroundColor = Colors.white,
+  });
+
+  /// Title
   final String title;
+
+  /// Content
   final String content;
 
-  const StepList({required this.title, required this.content});
+  /// Background Color
+  final Color backgroundColor;
+
+  final IconData icon;
 
   static const List<StepList> steps = <StepList>[
     StepList(
       title: 'Step 1',
       content: 'Content for Step 1',
+      icon: Icons.ac_unit,
+    ),
+    StepList(
+      title: 'Step 2',
+      content: 'Content for Step 2',
+      icon: Icons.access_alarm,
+    ),
+    StepList(
+      title: 'Step 3',
+      content: 'Content for Step 3',
+      icon: Icons.access_time,
+    ),
+    StepList(
+      title: 'Step 4',
+      content: 'Content for Step 4',
+      icon: Icons.accessible,
+    ),
+    StepList(
+      title: 'Step 5',
+      content: 'Content for Step 5',
+      icon: Icons.account_balance,
+    ),
+    StepList(
+      title: 'Step 6',
+      content: 'Content for Step 6',
+      icon: Icons.account_balance_wallet,
+    ),
+    StepList(
+      title: 'Step 7',
+      content: 'Content for Step 7',
+      icon: Icons.account_box,
+    ),
+    StepList(
+      title: 'Step 8',
+      content: 'Content for Step 8',
+      icon: Icons.account_circle,
+    ),
+    StepList(
+      title: 'Step 9',
+      content: 'Content for Step 9',
+      icon: Icons.add,
+    ),
+    StepList(
+      title: 'Step 10',
+      content: 'Content for Step 10',
+      icon: Icons.add_a_photo,
+    ),
+    StepList(
+      title: 'Step 11',
+      content: 'Content for Step 11',
+      icon: Icons.add_alarm,
     ),
   ];
+
+  /// Copy With
+  StepList copyWith({
+    String? title,
+    String? content,
+    Color? backgroundColor,
+    bool? isActive,
+    IconData? icon,
+  }) {
+    return StepList(
+      title: title ?? this.title,
+      content: content ?? this.content,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      icon: icon ?? this.icon,
+    );
+  }
 }
 
 final class CounterViewModel extends ChangeNotifier {
   int _counter = 0;
+
   int get counter => _counter;
 
-  void incrementCounter() {
-    if (_counter < 45) {
-      _counter += 5;
-    }
+  void increment() {
+    if (_counter < 50) _counter += 5;
+
     notifyListeners();
   }
 
-  void decrementCounter() {
+  void decrement() {
     if (_counter > 0) {
       _counter -= 5;
     }
+
     notifyListeners();
+  }
+
+  int getIncrementValue() {
+    return _counter;
   }
 }
