@@ -75,7 +75,7 @@ final class UsersModelList {
       email: 'random13@gmail.com',
     ),
     Users(
-      name: 'John',
+      name: 'Scott',
       surname: 'Smith',
       team: TeamEnum.android,
       age: '30',
@@ -83,12 +83,28 @@ final class UsersModelList {
       email: 'random14@gmail.com',
     ),
     Users(
-      name: 'Jane',
+      name: 'Marry',
       surname: 'Smith',
       team: TeamEnum.design,
       age: '28',
       homeTown: 'Chicago',
       email: 'random15@gmail.com',
+    ),
+    Users(
+      name: 'Mini',
+      surname: 'Johnson',
+      team: TeamEnum.flutter,
+      age: '29',
+      homeTown: 'Houston',
+      email: 'asfasf@gmail.com',
+    ),
+    Users(
+      name: 'Mici',
+      surname: 'hohnson',
+      team: TeamEnum.ios,
+      age: '31',
+      homeTown: 'Philadelphia',
+      email: 'asasd@gmail.com',
     ),
   ];
 }
