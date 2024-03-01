@@ -1,6 +1,10 @@
 import 'package:custom_grid_view/neon_apps.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'neon_detail.dart';
 
 final class NeonAppsView extends StatefulWidget {
   const NeonAppsView({super.key});
@@ -12,11 +16,19 @@ final class NeonAppsView extends StatefulWidget {
 final class _NeonAppsViewState extends State<NeonAppsView> {
   List<NeonApps> myApps = [];
   bool isLoading = false;
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   void _changeLoading() {
     isLoading = !isLoading;
 
     setState(() {});
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _refreshController.dispose();
   }
 
   @override
@@ -34,6 +46,15 @@ final class _NeonAppsViewState extends State<NeonAppsView> {
     _changeLoading();
   }
 
+  Future<void> updateBackground(int index) async {
+    setState(() {
+      myApps = List.from(myApps); // Yeni bir değiştirilebilir kopya oluştur
+      myApps[index] = myApps[index].copyWith(
+        backgroundColor: Colors.primaries[index % Colors.primaries.length],
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,50 +70,94 @@ final class _NeonAppsViewState extends State<NeonAppsView> {
           ),
         ],
       ),
-      body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 0.9,
-                mainAxisExtent: 300,
-              ),
-              itemCount: myApps.length,
-              itemBuilder: (BuildContext context, int index) {
-                return InkWell(
-                  onTap: () async {
-                    final Uri url = Uri.parse(
-                      myApps[index].storeURL,
-                    );
-                    if (await canLaunchUrl(url)) {
-                      await launchUrl(url);
-                    } else {
-                      throw 'Could not launch $url';
-                    }
-                  },
-                  child: Card(
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          alignment: Alignment.center,
-                          myApps[index].appIcon,
-                          height: myApps[index].height,
-                          width: myApps[index].height,
-                          fit: BoxFit.cover,
+      body: SmartRefresher(
+        onRefresh: () async {
+          _loadApps();
+          _refreshController.refreshCompleted();
+        },
+        controller: _refreshController,
+        enablePullDown: true,
+        enablePullUp: false,
+        footer: const ClassicFooter(
+          loadStyle: LoadStyle.ShowWhenLoading,
+          completeDuration: Duration(milliseconds: 500),
+          noDataText: 'No more data',
+          loadingText: 'Loading...',
+          canLoadingIcon: Icon(Icons.arrow_upward),
+          idleText: 'Load more',
+          failedText: 'Load failed!',
+          idleIcon: Icon(Icons.arrow_upward),
+          canLoadingText: 'Release to load more',
+          noMoreIcon: Icon(Icons.arrow_upward),
+        ),
+        child: isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 60,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 0.5,
+                  mainAxisExtent:
+                      myApps.any((element) => element.height > 150) ? 400 : 250,
+                ),
+                itemCount: myApps.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return CupertinoContextMenu(
+                    actions: [
+                      CupertinoContextMenuAction(
+                        trailingIcon: Icons.open_in_new,
+                        child: const Text('Open in App Store'),
+                        onPressed: () async {
+                          await updateBackground(index);
+
+                          final Uri url = Uri.parse(
+                            myApps[index].storeURL,
+                          );
+                          if (await canLaunchUrl(url)) {
+                            await launchUrl(url);
+                          } else {
+                            throw 'Could not launch $url';
+                          }
+                        },
+                      ),
+                    ],
+                    child: GestureDetector(
+                      onTap: () async {
+                        await updateBackground(index);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute<Widget>(
+                            builder: (context) => NeonDetail(
+                              neonApps: myApps[index],
+                            ),
+                          ),
+                        );
+                      },
+                      child: Card(
+                        color: myApps[index].backgroundColor,
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              alignment: Alignment.center,
+                              myApps[index].appIcon,
+                              height: myApps[index].height,
+                              width: myApps[index].height,
+                              fit: BoxFit.cover,
+                            ),
+                            Text(myApps[index].appName),
+                            Text(myApps[index].appreleseDate),
+                            Text(myApps[index].appCategory),
+                          ],
                         ),
-                        Text(myApps[index].appName),
-                        Text(myApps[index].appreleseDate),
-                        Text(myApps[index].appCategory),
-                      ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              ),
+      ),
     );
   }
 }
