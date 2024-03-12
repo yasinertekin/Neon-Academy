@@ -27,7 +27,7 @@ final class Users extends Equatable {
   /// [fontStyle] is a [FontStyle] that holds the user's font style.
   final FontStyle fontStyle;
 
-  final String backgroundColor;
+  final Color backgroundColor;
 
   @override
   List<Object?> get props => [name, age, imagePath, fontStyle];
@@ -39,7 +39,7 @@ final class Users extends Equatable {
     DateTime? age,
     String? imagePath,
     FontStyle? fontStyle,
-    String? backgroundColor,
+    Color? backgroundColor,
   }) {
     return Users(
       name: name ?? this.name,

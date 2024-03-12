@@ -30,7 +30,7 @@ final class ImagePickerViewmodel extends ChangeNotifier {
     age: DateTime.now(),
     imagePath: '',
     fontStyle: FontStyle.normal,
-    backgroundColor: '0XFFFFFFFF',
+    backgroundColor: Colors.white,
   );
 
   ///update age
@@ -52,7 +52,7 @@ final class ImagePickerViewmodel extends ChangeNotifier {
   }
 
   /// update background color
-  void updateBackgroundColor(String backgroundColor) {
+  void updateBackgroundColor(Color backgroundColor) {
     users = users.copyWith(backgroundColor: backgroundColor);
     notifyListeners();
   }

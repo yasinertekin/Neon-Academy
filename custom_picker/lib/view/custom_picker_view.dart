@@ -4,6 +4,7 @@ import 'package:custom_picker/model/users.dart';
 import 'package:custom_picker/view/mixin/custom_picker_view_mixin.dart';
 import 'package:custom_picker/view_model/imace_picker_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 part 'widget/change_age_view.dart';
 part 'widget/change_background_color.dart';
