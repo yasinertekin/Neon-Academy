@@ -51,14 +51,14 @@ final class NeonAppsList {
       appreleseDate: '2021-10-01',
       appCategory: 'Business',
       height: 150,
-      storeURL: 'https://www.google.com',
+      storeURL: 'https://google.com',
     ),
     NeonApps(
       appIcon: 'assets/time_wrap.png',
       appName: 'Neon App 2',
       appreleseDate: '2021-10-02',
       appCategory: 'Entertainment',
-      storeURL: 'https://www.google.com',
+      storeURL: 'https://flutter.dev',
       height: 150,
     ),
     NeonApps(
@@ -66,7 +66,7 @@ final class NeonAppsList {
       appName: 'Neon App 3',
       appreleseDate: '2021-10-03',
       appCategory: 'Education',
-      storeURL: 'https://www.google.com',
+      storeURL: 'https://flutter.dev',
       height: 150,
     ),
     NeonApps(
@@ -74,7 +74,7 @@ final class NeonAppsList {
       appName: 'Neon App 4',
       appreleseDate: '2021-10-04',
       appCategory: 'Health & Fitness',
-      storeURL: 'https://www.google.com',
+      storeURL: 'https://youtube.com',
       height: 200,
     ),
     NeonApps(
