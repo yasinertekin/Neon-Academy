@@ -17,6 +17,7 @@ final class _HomeView extends StatelessWidget {
     final age = dateTimeYear - users.age.year;
 
     return Scaffold(
+      backgroundColor: Color(int.parse(users.backgroundColor)),
       appBar: AppBar(
         title: Text(
           'Custom Picker View',

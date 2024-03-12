@@ -12,6 +12,7 @@ final class Users extends Equatable {
     required this.age,
     required this.imagePath,
     required this.fontStyle,
+    required this.backgroundColor,
   });
 
   /// [name] is a [String] that holds the user's name.
@@ -26,6 +27,8 @@ final class Users extends Equatable {
   /// [fontStyle] is a [FontStyle] that holds the user's font style.
   final FontStyle fontStyle;
 
+  final String backgroundColor;
+
   @override
   List<Object?> get props => [name, age, imagePath, fontStyle];
 
@@ -36,12 +39,14 @@ final class Users extends Equatable {
     DateTime? age,
     String? imagePath,
     FontStyle? fontStyle,
+    String? backgroundColor,
   }) {
     return Users(
       name: name ?? this.name,
       fontStyle: fontStyle ?? this.fontStyle,
       age: age ?? this.age,
       imagePath: imagePath ?? this.imagePath,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
     );
   }
 }

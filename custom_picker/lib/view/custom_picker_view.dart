@@ -6,6 +6,7 @@ import 'package:custom_picker/view_model/imace_picker_view_model.dart';
 import 'package:flutter/material.dart';
 
 part 'widget/change_age_view.dart';
+part 'widget/change_background_color.dart';
 part 'widget/change_font_view.dart';
 part 'widget/home_view.dart';
 part 'widget/pick_image.dart';
@@ -74,6 +75,11 @@ extension on _CustomPickerViewEnum {
           users,
           imagePickerViewModel,
         );
+      case _CustomPickerViewEnum.changeColor:
+        return ChangeBackgroundColor(
+          imagePickerViewmodel: imagePickerViewModel,
+          pageController: pageController,
+        );
     }
   }
 }
@@ -91,4 +97,6 @@ enum _CustomPickerViewEnum {
 
   /// [changeaAge] is the fourth page of the custom picker view.
   changeaAge,
+
+  changeColor,
 }

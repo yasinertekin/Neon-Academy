@@ -42,10 +42,10 @@ final class _ChangeAgeView extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               pageController.jumpToPage(
-                _CustomPickerViewEnum.home.index,
+                _CustomPickerViewEnum.changeColor.index,
               );
             },
-            child: const Text('Navigate to Home Page'),
+            child: const Text('Navigate to Color Page'),
           ),
         ],
       ),
