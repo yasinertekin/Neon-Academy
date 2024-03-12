@@ -1,62 +1,84 @@
 import 'package:flutter/material.dart';
+import 'package:scroll_view_rescue/scroll_view_mixin.dart';
 
-class ScrollViewRescue extends StatelessWidget {
-  ScrollViewRescue({super.key});
+final class ScrollViewRescue extends StatefulWidget {
+  const ScrollViewRescue({super.key});
+  @override
+  State<ScrollViewRescue> createState() => _ScrollViewRescueState();
+}
 
-  final List<String> labels = List.generate(8, (index) => 'Label ${index + 1}');
-  final ScrollController _scrollController = ScrollController();
+final class _ScrollViewRescueState extends State<ScrollViewRescue>
+    with ScrollViewMixin {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: const _ScrollViewAppBar(),
+      body: ListView.builder(
+        controller: scrollController,
+        itemCount: data.length + 1,
+        itemBuilder: (context, index) {
+          if (index == data.length) {
+            if (isEndOfList) {
+              return const Center(
+                child: Text(
+                  'End of List!',
+                  style: TextStyle(fontSize: 18),
+                ),
+              );
+            } else {
+              loadAdditionalSpells();
+              return const Center(child: CircularProgressIndicator());
+            }
+          }
+
+          return _IndexCard(
+            index: index,
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _ScrollViewAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const _ScrollViewAppBar({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final List<String> labels =
-        List.generate(8, (index) => 'Label ${index + 1}');
+    return AppBar(
+      toolbarHeight: 50,
+      title: const Text('Scroll View Rescue'),
+    );
+  }
 
-    void showEndOfScrollViewAlert(BuildContext context) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('End of Scroll View'),
-            content: const Text('You have reached the end of the scroll view.'),
-            actions: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    }
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
 
-    return Scaffold(
-      body: SafeArea(
-        child: NotificationListener<ScrollEndNotification>(
-          onNotification: (notification) {
-            if (_scrollController.position.extentAfter == 0) {
-              showEndOfScrollViewAlert(context);
-            }
-            return true;
-          },
-          child: ListView.builder(
-            controller: _scrollController,
-            itemCount: labels.length,
-            physics: const ClampingScrollPhysics(),
-            itemBuilder: (context, index) {
-              if (index < 3) {
-                return ListTile(
-                  title: Text(labels[index]),
-                );
-              } else {
-                return SizedBox(
-                    height: MediaQuery.of(context).size.height * 2,
-                    child: ListTile(
-                      title: Text(labels[index]),
-                    ));
-              }
-            },
+class _IndexCard extends StatelessWidget {
+  const _IndexCard({
+    super.key,
+    required this.index,
+  });
+
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.22,
+      child: Card(
+        color: Colors.deepPurple,
+        child: Center(
+          child: Text(
+            'index ${index + 1}',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),

@@ -7,58 +7,44 @@ final class CustomStack extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: OrientationBuilder(
-          builder: (context, orientation) {
-            return Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                Positioned(
-                  top: orientation == Orientation.portrait ? 50 : 20,
-                  left: orientation == Orientation.portrait ? 20 : 50,
-                  child: const ColoredBox(
-                    color: Colors.red,
-                    child: Text(
-                      'Expelliarmus',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            Container(
+              color: Colors.blue,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: const Text(
+                'Expelliarmus',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
                 ),
-                Positioned(
-                  top: orientation == Orientation.portrait ? 50 : 20,
-                  right: orientation == Orientation.portrait ? 20 : 50,
-                  child: const ColoredBox(
-                    color: Colors.green,
-                    child: Text(
-                      'Expecto Patronum',
-                      style: TextStyle(fontSize: 20),
-                    ),
+              ),
+            ),
+            Container(
+                color: Colors.red,
+                width: MediaQuery.of(context).size.width / 2,
+                height: MediaQuery.of(context).size.height / 2,
+                child: const Text(
+                  'Stupefy',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
                   ),
-                ),
-                Positioned(
-                  bottom: orientation == Orientation.portrait ? 50 : 20,
-                  left: orientation == Orientation.portrait ? 20 : 50,
-                  child: const ColoredBox(
-                    color: Colors.yellow,
-                    child: Text(
-                      'Avada Kedavra',
-                      style: TextStyle(fontSize: 20),
-                    ),
+                )),
+            Container(
+                color: Colors.green,
+                width: MediaQuery.of(context).size.width / 3,
+                height: MediaQuery.of(context).size.height / 3,
+                child: const Text(
+                  'Lumos',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
                   ),
-                ),
-                Positioned(
-                  bottom: orientation == Orientation.portrait ? 50 : 20,
-                  right: orientation == Orientation.portrait ? 20 : 50,
-                  child: const ColoredBox(
-                    color: Colors.blue,
-                    child: Text(
-                      'Alohomora',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
+                )),
+          ],
         ),
       ),
     );
