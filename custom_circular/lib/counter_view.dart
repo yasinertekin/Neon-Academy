@@ -1,6 +1,21 @@
+import 'dart:math';
+
 import 'package:custom_circular/counter_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:kartal/kartal.dart';
+
+final random = Random();
+
+extension BuildContextExtensions on BuildContext {
+  Color get randomColor {
+    final random = Random();
+    return Color.fromRGBO(
+      random.nextInt(256),
+      random.nextInt(256),
+      random.nextInt(256),
+      1,
+    );
+  }
+}
 
 final class CounterView extends StatelessWidget {
   const CounterView({super.key});
@@ -8,11 +23,14 @@ final class CounterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final counterViewModel = CounterViewModel();
+
     return ListenableBuilder(
       listenable: counterViewModel,
       builder: (context, child) => Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: counterViewModel.startAutoIncrement,
+          onPressed: () {
+            counterViewModel.startAutoIncrement(context);
+          },
           child: const Icon(Icons.add),
         ),
         appBar: AppBar(
@@ -27,20 +45,18 @@ final class CounterView extends StatelessWidget {
                   children: [
                     if (counterViewModel.counter < 100)
                       CircularProgressIndicator(
-                        color: counterViewModel.counter % 10 == 0
-                            ? context.general.randomColor
-                            : Colors.blue,
+                        color: counterViewModel.currentColor,
                       )
                     else
                       const SizedBox.shrink(),
-                    Text('Sayaç: ${counterViewModel.counter}'),
+                    Text('Counter: ${counterViewModel.counter}'),
                     if (counterViewModel.counter == 100)
-                      const Text("Sayaç 100'e ulaştı"),
+                      const Text('Counter reached 100'),
                   ],
                 )
               else
                 const Text(
-                  'Otomatik artışı başlatmak için artı simgesine tıkla',
+                  'Click the plus icon to start automatic increment',
                 ),
             ],
           ),

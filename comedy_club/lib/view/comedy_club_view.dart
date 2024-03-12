@@ -12,6 +12,7 @@ final class ComedyClubView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         title: const Text(
           'Comedy Club',
           style: TextStyle(
@@ -77,7 +78,7 @@ final class _UserTicketList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.3,
+      height: MediaQuery.of(context).size.height * 0.35,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: TicketList.ticketList.length,
@@ -159,7 +160,7 @@ final class _UpcomingShowList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.3,
+      height: MediaQuery.of(context).size.height * 0.35,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: UpcomingShowsList.upcomingShows.length,

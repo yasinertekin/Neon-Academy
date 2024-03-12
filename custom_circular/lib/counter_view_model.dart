@@ -1,24 +1,23 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
+import 'package:custom_circular/counter_view.dart';
 import 'package:flutter/material.dart';
 
-final class CounterViewModel extends ChangeNotifier {
-  CounterViewModel();
-
+class CounterViewModel extends ChangeNotifier {
   int _counter = 0;
+  Color _currentColor = Colors.blue;
   Timer? _timer;
 
   int get counter => _counter;
+  Color get currentColor => _currentColor;
 
-  void startAutoIncrement() {
+  void startAutoIncrement(BuildContext context) {
     _timer = Timer.periodic(
       const Duration(milliseconds: 100),
       (timer) {
         if (_counter < 100) {
-          incrementCounter();
+          incrementCounter(context);
         } else {
-          // Sayaç 100'e ulaştığında zamanlayıcıyı durdur
           _timer?.cancel();
         }
       },
@@ -26,14 +25,17 @@ final class CounterViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void incrementCounter() {
+  void incrementCounter(BuildContext context) {
     _counter++;
+    if (_counter % 10 == 0 && _counter <= 100) {
+      _currentColor = context.randomColor;
+    }
     notifyListeners();
   }
 
   @override
   void dispose() {
-    _timer?.cancel(); // Zamanlayıcıyı dispose et
+    _timer?.cancel();
     super.dispose();
   }
 }

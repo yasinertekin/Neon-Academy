@@ -13,6 +13,9 @@ final class _HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dateTimeYear = DateTime.now().year;
+    final age = dateTimeYear - users.age.year;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -27,7 +30,7 @@ final class _HomeView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Age: ${users.age}',
+              'Age: $age',
               style: TextStyle(
                 fontStyle: users.fontStyle,
               ),

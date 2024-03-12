@@ -8,6 +8,6 @@ mixin CustomStepperMixin<StatelessWidget extends CustomStepperView> {
     final incrementValue = counterViewModel.getIncrementValue();
     final colorIndex =
         incrementValue ~/ 5; // Divide by 5 to determine color index
-    return index == colorIndex ? Colors.orange : Colors.white;
+    return index == colorIndex ? const Color.fromRGBO(255, 152, 0, 1) : Colors.white;
   }
 }
