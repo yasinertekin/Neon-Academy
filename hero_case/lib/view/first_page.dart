@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hero_case/view/labirent_view.dart';
+import 'package:hero_case/view/maze_game_view.dart';
 
 final class FirstPage extends StatelessWidget {
   const FirstPage({super.key});
@@ -19,7 +19,7 @@ final class FirstPage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LabirentView()),
+                  MaterialPageRoute(builder: (context) => const MazeGame()),
                 );
               },
               child: const Text('Start'),
