@@ -1,17 +1,8 @@
 import 'dart:io';
 
+import 'package:banner_example/count_down/countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-
-import 'countdown_timer.dart';
-
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
-  runApp(const MaterialApp(
-    home: RewardedExample(),
-  ));
-}
 
 /// A simple app that loads a rewarded ad.
 class RewardedExample extends StatefulWidget {
