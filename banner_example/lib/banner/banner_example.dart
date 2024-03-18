@@ -54,7 +54,7 @@ class BannerExampleState extends State<BannerExample> {
     BannerAd(
       adUnitId: _adUnitId,
       request: const AdRequest(),
-      size: AdSize.banner,
+      size: AdSize.largeBanner,
       listener: BannerAdListener(
         // Called when an ad is successfully received.
         onAdLoaded: (ad) {
