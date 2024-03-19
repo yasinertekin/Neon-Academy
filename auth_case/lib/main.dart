@@ -1,8 +1,12 @@
-import 'package:auth_case/feature/auth/login_page.dart';
+import 'package:auth_case/feature/auth/auth_splash/auth_splash.dart';
+import 'package:auth_case/feature/home/cubit/home_cubit.dart';
 import 'package:auth_case/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_ui_storage/firebase_ui_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,7 +16,20 @@ void main() async {
   FirebaseUIAuth.configureProviders([
     EmailAuthProvider(),
   ]);
-  runApp(const MyApp());
+
+  final storage = FirebaseStorage.instance;
+
+  final config = FirebaseUIStorageConfiguration(
+    storage: storage,
+  );
+
+  await FirebaseUIStorage.configure(config);
+  runApp(
+    BlocProvider<HomeCubit>(
+      create: (context) => HomeCubit()..getPosts(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -42,7 +59,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
+      home: const AuthSplashView(),
     );
   }
 }
