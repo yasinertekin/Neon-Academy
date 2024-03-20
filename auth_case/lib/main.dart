@@ -25,8 +25,12 @@ void main() async {
 
   await FirebaseUIStorage.configure(config);
   runApp(
-    BlocProvider<HomeCubit>(
-      create: (context) => HomeCubit()..getPosts(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<HomeCubit>(
+          create: (context) => HomeCubit()..getPosts(),
+        ),
+      ],
       child: const MyApp(),
     ),
   );

@@ -1,17 +1,13 @@
-import 'dart:io';
-
 import 'package:auth_case/feature/add_post/add_post_page.dart';
-import 'package:auth_case/feature/auth/login_page.dart';
 import 'package:auth_case/feature/home/cubit/home_cubit.dart';
 import 'package:auth_case/feature/home/cubit/state/home_state.dart';
+import 'package:auth_case/feature/settings/settings_page.dart';
 import 'package:auth_case/product/model/comment_model.dart';
 import 'package:auth_case/product/model/post_model.dart';
 import 'package:auth_case/product/model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 
 final class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -30,93 +26,51 @@ final class _HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<_HomeView> {
-  final _imagePicker = ImagePicker();
-
-  String _imagePath = '';
-  String _imageUrl = '';
-  final int _time = 0;
-  final _storage = FirebaseStorage.instance;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute<void>(
-              builder: (context) => const AddPostPage(),
-            ),
+      appBar: const _HomeAppBar(),
+      floatingActionButton: const _AddPostFloatingActionButton(),
+      body: BlocBuilder<HomeCubit, HomeState>(
+        builder: (context, state) {
+          if (state.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state.error.isNotEmpty) {
+            return Text(state.error);
+          }
+          if (state.posts.isEmpty) {
+            return const Text('No posts');
+          }
+          return ListView.builder(
+            reverse: true,
+            itemCount: state.posts.length,
+            itemBuilder: (context, index) {
+              final post = state.posts[index];
+              return _PostCard(post: post);
+            },
           );
         },
-        child: const Icon(Icons.add),
       ),
-      appBar: const _HomeAppBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 50,
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                final image = await _imagePicker.pickImage(
-                  source: ImageSource.gallery,
-                );
-                if (image == null) return;
-                _imagePath = image.path;
+    );
+  }
+}
 
-                // Resmi Firebase Storage'a yükle
-                await _storage
-                    .ref('posts/${FirebaseAuth.instance.currentUser?.uid}.jpg')
-                    .putFile(
-                      File(_imagePath),
-                    );
+final class _AddPostFloatingActionButton extends StatelessWidget {
+  const _AddPostFloatingActionButton();
 
-                // Resmin URL'sini al
-                _imageUrl = await _storage
-                    .ref('posts/${FirebaseAuth.instance.currentUser?.uid}.jpg')
-                    .getDownloadURL();
-
-                // Kullanıcının fotoğraf URL'sini güncelle
-                await FirebaseAuth.instance.currentUser
-                    ?.updatePhotoURL(_imageUrl);
-
-                setState(() {});
-              },
-              child: const Text('Update Profile Photo'),
-            ),
-            const SizedBox(height: 10),
-            Center(
-              child: BlocBuilder<HomeCubit, HomeState>(
-                builder: (context, state) {
-                  if (state.isLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (state.error.isNotEmpty) {
-                    return Text(state.error);
-                  }
-                  if (state.posts.isEmpty) {
-                    return const Text('No posts');
-                  }
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.8,
-                    child: ListView.builder(
-                      reverse: true,
-                      itemCount: state.posts.length,
-                      itemBuilder: (context, index) {
-                        final post = state.posts[index];
-                        return _PostCard(post: post);
-                      },
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute<void>(
+            builder: (context) => const AddPostPage(),
+          ),
+        );
+      },
+      child: const Icon(Icons.add),
     );
   }
 }
@@ -283,35 +237,28 @@ final class _HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading: FirebaseAuth.instance.currentUser?.photoURL != null &&
-              FirebaseAuth.instance.currentUser?.photoURL?.isNotEmpty == true
-          ? CircleAvatar(
-              child: Center(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: Image.network(
-                    FirebaseAuth.instance.currentUser?.photoURL ?? '',
-                    height: 300,
-                    width: 300,
-                  ),
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 8),
+        child: FirebaseAuth.instance.currentUser?.photoURL != null
+            ? CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage(
+                  FirebaseAuth.instance.currentUser!.photoURL!,
                 ),
-              ),
-            )
-          : const CircleAvatar(
-              child: Icon(Icons.person),
-            ),
+              )
+            : const Icon(Icons.account_circle, size: 40),
+      ),
       title: Text(
         FirebaseAuth.instance.currentUser?.displayName ?? '',
       ),
       actions: [
         IconButton(
-          icon: const Icon(Icons.exit_to_app),
+          icon: const Icon(Icons.settings),
           onPressed: () {
-            FirebaseAuth.instance.signOut();
             Navigator.push(
               context,
               MaterialPageRoute<void>(
-                builder: (context) => const LoginPage(),
+                builder: (context) => const SettingsPage(),
               ),
             );
           },
