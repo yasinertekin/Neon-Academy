@@ -55,8 +55,8 @@ final class _AddPostViewState extends State<_AddPostView> {
         child: Center(
           child: ListView(
             children: [
-              const SizedBox(
-                height: 50,
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height * 0.31,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
