@@ -52,96 +52,101 @@ final class _AddPostViewState extends State<_AddPostView> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
-        child: ListView(
-          children: [
-            const SizedBox(
-              height: 50,
-            ),
-            Wrap(
-              children: [
-                IconButton(
-                  onPressed: () async {
-                    final image = await _imagePicker.pickImage(
-                      source: ImageSource.camera,
-                    );
-                    if (image == null) return;
-                    _imagePath = image.path;
-
-                    setState(() {});
-                  },
-                  icon: const Icon(Icons.camera_alt),
-                ),
-                IconButton(
-                  onPressed: () async {
-                    final image = await _imagePicker.pickImage(
-                      source: ImageSource.gallery,
-                    );
-                    if (image == null) return;
-                    setState(() {
+        child: Center(
+          child: ListView(
+            children: [
+              const SizedBox(
+                height: 50,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                    onPressed: () async {
+                      final image = await _imagePicker.pickImage(
+                        source: ImageSource.camera,
+                      );
+                      if (image == null) return;
                       _imagePath = image.path;
-                    });
-                  },
-                  icon: const Icon(Icons.image),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            if (_imagePath.isNotEmpty)
-              Image.file(
-                File(_imagePath),
-                height: 200,
-                width: 200,
-              ),
-            _CustomForm(
-              formKey: _formKey,
-              titleController: _titleController,
-              bodyController: _bodyController,
-            ),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () async {
-                  _imagePath.isEmpty
-                      ? ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please select an image'),
-                          ),
-                        )
-                      : null;
 
-                  if (_formKey.currentState?.validate() ??
-                      true && _imagePath.isNotEmpty) {
-                    final dateTime = DateTime.now().microsecondsSinceEpoch;
-                    _time = dateTime;
-                    await _storage.ref('posts/$_time').putFile(
-                          File(_imagePath),
-                        );
-                    _imageUrl =
-                        await _storage.ref('posts/$_time').getDownloadURL();
-                    await context.read<HomeCubit>().addPost(
-                          PostModel(
-                            title: _titleController.text,
-                            body: _bodyController.text,
-                            imageUrl: _imageUrl,
-                            comments: const [],
-                            user: UserModel(
-                              id: FirebaseAuth.instance.currentUser?.uid ?? '',
-                              name: FirebaseAuth
-                                      .instance.currentUser?.displayName ??
-                                  '',
-                              email: FirebaseAuth.instance.currentUser?.email ??
-                                  '',
-                              password: '',
-                            ),
-                          ),
-                        );
-                  }
-                },
-                child: const Text('Add Post'),
+                      setState(() {});
+                    },
+                    icon: const Icon(Icons.camera_alt),
+                  ),
+                  IconButton(
+                    onPressed: () async {
+                      final image = await _imagePicker.pickImage(
+                        source: ImageSource.gallery,
+                      );
+                      if (image == null) return;
+                      setState(() {
+                        _imagePath = image.path;
+                      });
+                    },
+                    icon: const Icon(Icons.image),
+                  ),
+                ],
               ),
-            ),
-          ],
+              const SizedBox(height: 16),
+              if (_imagePath.isNotEmpty)
+                Image.file(
+                  File(_imagePath),
+                  height: 200,
+                  width: 200,
+                ),
+              _CustomForm(
+                formKey: _formKey,
+                titleController: _titleController,
+                bodyController: _bodyController,
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    _imagePath.isEmpty
+                        ? ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please select an image'),
+                            ),
+                          )
+                        : null;
+
+                    if (_formKey.currentState?.validate() ??
+                        true && _imagePath.isNotEmpty) {
+                      final dateTime = DateTime.now().microsecondsSinceEpoch;
+                      _time = dateTime;
+                      await _storage.ref('posts/$_time').putFile(
+                            File(_imagePath),
+                          );
+                      _imageUrl =
+                          await _storage.ref('posts/$_time').getDownloadURL();
+                      await context.read<HomeCubit>().addPost(
+                            PostModel(
+                              title: _titleController.text,
+                              body: _bodyController.text,
+                              imageUrl: _imageUrl,
+                              comments: const [],
+                              user: UserModel(
+                                id: FirebaseAuth.instance.currentUser?.uid ??
+                                    '',
+                                name: FirebaseAuth
+                                        .instance.currentUser?.displayName ??
+                                    '',
+                                email:
+                                    FirebaseAuth.instance.currentUser?.email ??
+                                        '',
+                                password: '',
+                              ),
+                            ),
+                          );
+                    }
+                  },
+                  child: const Text('Add Post'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
