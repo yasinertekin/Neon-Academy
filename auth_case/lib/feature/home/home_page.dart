@@ -1,4 +1,5 @@
 import 'package:auth_case/feature/add_post/add_post_page.dart';
+import 'package:auth_case/feature/comment/comment_page.dart';
 import 'package:auth_case/feature/home/cubit/home_cubit.dart';
 import 'package:auth_case/feature/home/cubit/state/home_state.dart';
 import 'package:auth_case/feature/settings/settings_page.dart';
@@ -196,7 +197,25 @@ class _AddCommandButtonState extends State<_AddCommandButton> {
           },
         );
       },
-      child: const Text('Add Comment'),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text('Add Comment'),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (context) => CommentPage(
+                    comments: widget.post.comments,
+                  ),
+                ),
+              );
+            },
+            child: const Text('Go to Comment Page'),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -214,6 +233,7 @@ final class _CommentList extends StatelessWidget {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.13,
       child: ListView.builder(
+        reverse: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: post.comments?.length ?? 0,
         itemBuilder: (BuildContext context, int index) {

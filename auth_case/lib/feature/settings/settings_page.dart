@@ -26,6 +26,7 @@ final class _SettingsViewState extends State<_SettingsView> {
   final _currentUser = FirebaseAuth.instance.currentUser;
   final _nameController = TextEditingController();
   String _userName = '';
+  String _userImageUrl = '';
 
   @override
   void initState() {
@@ -50,27 +51,74 @@ final class _SettingsViewState extends State<_SettingsView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (_currentUser?.photoURL != null)
-              CircleAvatar(
-                radius: 50,
-                backgroundImage: NetworkImage(_currentUser!.photoURL!),
+            if (_currentUser?.photoURL == null ||
+                _currentUser?.photoURL?.isEmpty == true)
+              const Text('No profile photo'),
+            if (_userImageUrl.isNotEmpty)
+              Image.network(
+                _userImageUrl,
+                height: 202,
+                width: 202,
               )
             else
-              const Icon(Icons.account_circle, size: 100),
+              Image.network(
+                _currentUser?.photoURL ?? '',
+                height: 202,
+                width: 202,
+              ),
             const SizedBox(height: 20),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                UpdateProfileImageButton(),
-                SizedBox(width: 20),
-                SignOutButton(),
+                ElevatedButton(
+                  onPressed: () async {
+                    final image = await ImagePicker().pickImage(
+                      source: ImageSource.gallery,
+                    );
+                    if (image == null) return;
+                    final imagePath = image.path;
+                    final dateTimeNow = DateTime.now().millisecondsSinceEpoch;
+                    final time = dateTimeNow;
+
+                    // Resmi Firebase Storage'a yükle
+                    await FirebaseStorage.instance
+                        .ref(
+                          'posts/${FirebaseAuth.instance.currentUser?.uid}$time.jpg',
+                        )
+                        .putFile(
+                          File(imagePath),
+                        );
+
+                    // Resmin URL'sini al
+                    _userImageUrl = await FirebaseStorage.instance
+                        .ref(
+                          'posts/${FirebaseAuth.instance.currentUser?.uid}$time.jpg',
+                        )
+                        .getDownloadURL();
+
+                    // Kullanıcının fotoğraf URL'sini güncelle
+                    await FirebaseAuth.instance.currentUser
+                        ?.updatePhotoURL(_userImageUrl);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Profile photo updated'),
+                      ),
+                    );
+                    setState(() {});
+                  },
+                  child: const Text('Update Profile Photo'),
+                ),
+                const SizedBox(width: 20),
+                const SignOutButton(),
               ],
             ),
             Column(
               children: [
                 TextField(
                   decoration: InputDecoration(
-                    labelText: _userName,
+                    labelText: _userName.isEmpty
+                        ? _currentUser?.displayName
+                        : _userName,
                   ),
                   controller: _nameController,
                 ),
@@ -99,8 +147,9 @@ final class _SettingsViewState extends State<_SettingsView> {
 }
 
 final class UpdateProfileImageButton extends StatefulWidget {
-  const UpdateProfileImageButton({super.key});
+  const UpdateProfileImageButton({required this.imageUrl, super.key});
 
+  final String imageUrl;
   @override
   State<UpdateProfileImageButton> createState() =>
       _UpdateProfileImageButtonState();
@@ -138,7 +187,6 @@ final class _UpdateProfileImageButtonState
 
         // Kullanıcının fotoğraf URL'sini güncelle
         await FirebaseAuth.instance.currentUser?.updatePhotoURL(imageUrl);
-
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Profile photo updated'),
