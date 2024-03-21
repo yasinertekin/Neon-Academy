@@ -31,6 +31,12 @@ final class _NeonAppsViewState extends State<NeonAppsView> {
     _refreshController.dispose();
   }
 
+  Future<void> _launchInWebView(Uri url) async {
+    if (!await launchUrl(url, mode: LaunchMode.externalNonBrowserApplication)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -113,14 +119,7 @@ final class _NeonAppsViewState extends State<NeonAppsView> {
                         onPressed: () async {
                           await updateBackground(index);
 
-                          final Uri url = Uri.parse(
-                            myApps[index].storeURL,
-                          );
-                          if (await canLaunchUrl(url)) {
-                            await launchUrl(url);
-                          } else {
-                            throw 'Could not launch $url';
-                          }
+                          _launchInWebView(Uri.parse(myApps[index].storeURL));
                         },
                       ),
                     ],

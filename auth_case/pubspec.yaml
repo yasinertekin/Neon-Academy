@@ -51,6 +51,8 @@ dependencies:
   provider: ^6.1.2
   url_launcher: ^6.2.5
   firebase_remote_config: ^4.3.18
+  firebase_crashlytics: ^3.4.19
+  firebase_analytics: ^10.8.10
 
 dev_dependencies:
   flutter_test:

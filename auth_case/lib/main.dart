@@ -1,7 +1,10 @@
+import 'dart:ui';
+
 import 'package:auth_case/feature/auth/auth_splash/auth_splash.dart';
 import 'package:auth_case/feature/home/cubit/home_cubit.dart';
 import 'package:auth_case/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_storage/firebase_ui_storage.dart';
@@ -22,8 +25,15 @@ void main() async {
   final config = FirebaseUIStorageConfiguration(
     storage: storage,
   );
-
+  // Pass all uncaught "fatal" errors from the framework to Crashlytics
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   await FirebaseUIStorage.configure(config);
+
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
   runApp(
     MultiBlocProvider(
       providers: [

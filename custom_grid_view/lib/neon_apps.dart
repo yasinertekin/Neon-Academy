@@ -51,14 +51,15 @@ final class NeonAppsList {
       appreleseDate: '2021-10-01',
       appCategory: 'Business',
       height: 150,
-      storeURL: 'https://google.com',
+      storeURL:
+          'https://apps.apple.com/us/app/the-time-warp-scan-filter/id6456889986',
     ),
     NeonApps(
       appIcon: 'assets/time_wrap.png',
       appName: 'Neon App 2',
       appreleseDate: '2021-10-02',
       appCategory: 'Entertainment',
-      storeURL: 'https://flutter.dev',
+      storeURL: 'https://neonapps.co/references/ai-cartoon-yourself',
       height: 150,
     ),
     NeonApps(
@@ -66,7 +67,7 @@ final class NeonAppsList {
       appName: 'Neon App 3',
       appreleseDate: '2021-10-03',
       appCategory: 'Education',
-      storeURL: 'https://flutter.dev',
+      storeURL: 'https://neonapps.co/references/call-blocker',
       height: 150,
     ),
     NeonApps(
@@ -74,7 +75,7 @@ final class NeonAppsList {
       appName: 'Neon App 4',
       appreleseDate: '2021-10-04',
       appCategory: 'Health & Fitness',
-      storeURL: 'https://youtube.com',
+      storeURL: 'https://neonapps.co/references/instagram-analytics',
       height: 200,
     ),
     NeonApps(
@@ -83,7 +84,8 @@ final class NeonAppsList {
       appreleseDate: '2021-10-10',
       appCategory: 'Shopping',
       height: 200,
-      storeURL: 'https://www.google.com',
+      storeURL:
+          'https://apps.apple.com/us/app/smart-cleaner-free-up-space/id1576477935',
     )
   ];
 }
