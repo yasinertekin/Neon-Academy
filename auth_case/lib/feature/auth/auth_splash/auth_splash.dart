@@ -1,5 +1,5 @@
 import 'package:auth_case/feature/auth/login_page.dart';
-import 'package:auth_case/feature/home/home_page.dart';
+import 'package:auth_case/feature/mascot_picker/mascot_picker_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +12,7 @@ final class AuthSplashView extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.data != null) {
-          return const HomePage();
+          return const MascotPickerPage();
         } else if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator.adaptive(),
