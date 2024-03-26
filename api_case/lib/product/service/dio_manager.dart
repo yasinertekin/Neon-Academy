@@ -5,12 +5,16 @@ import 'package:flutter/material.dart';
 /// Dio manager class
 @immutable
 final class DioManager {
-  static final Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: ServiceUrl.baseUrl.value,
-    ),
-  );
+  /// Constructor
+  DioManager(String? baseUrl) {
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: baseUrl ?? ServiceUrl.baseUrl.value,
+      ),
+    );
+  }
+  late final Dio _dio;
 
-  /// Get Dio instance
-  static Dio get dioInstance => _dio;
+  /// Get the Dio service
+  Dio get dio => _dio;
 }

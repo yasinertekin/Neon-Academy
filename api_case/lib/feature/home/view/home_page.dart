@@ -22,7 +22,9 @@ final class HomePage extends StatelessWidget {
     return BlocProvider<HomeCubit>(
       create: (context) => HomeCubit(
         FoodServiceImpl(
-          service: DioManager.dioInstance,
+          service: DioManager(
+            ServiceUrl.baseUrl.value,
+          ).dio,
         ),
       ),
       child: const _HomeView(),

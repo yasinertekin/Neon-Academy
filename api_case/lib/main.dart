@@ -1,8 +1,29 @@
-import 'package:api_case/feature/home/view/home_page.dart';
+import 'package:api_case/feature/products/view/products_page.dart';
+import 'package:api_case/feature/save_user/cubit/save_user_cubit.dart';
+import 'package:api_case/feature/task_master/cubit/task_master_cubit.dart';
+import 'package:api_case/product/service/cache_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/adapters.dart';
 
-void main() {
-  runApp(const _MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => SaveUserCubit(),
+        ),
+        BlocProvider(
+          create: (context) => TaskMasterCubit(
+            PinnedCacheManager('task_master'),
+          ),
+        ),
+      ],
+      child: const _MyApp(),
+    ),
+  );
 }
 
 final class _MyApp extends StatelessWidget {
@@ -17,7 +38,7 @@ final class _MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: const ProductsPage(),
     );
   }
 }
