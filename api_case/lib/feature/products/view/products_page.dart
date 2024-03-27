@@ -30,8 +30,14 @@ final class _ProductsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.read<ProductsCubit>().postArticle();
+        onPressed: () async {
+          if (await context.read<ProductsCubit>().postArticle()) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Article posted successfully'),
+              ),
+            );
+          }
         },
         child: const Icon(Icons.add),
       ),
