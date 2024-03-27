@@ -19,13 +19,15 @@ final class ProductsCubit extends Cubit<ProductsState> {
     }
   }
 
-  Future<void> postArticle() async {
+  Future<bool> postArticle() async {
     emit(state.copyWith(loading: true));
     try {
       await _productsService.postProducts();
       emit(state.copyWith(loading: false));
+      return true;
     } catch (e) {
       emit(state.copyWith(error: e.toString()));
+      return false;
     }
   }
 }

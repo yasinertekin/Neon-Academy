@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:api_case/product/model/authors.dart';
 import 'package:api_case/product/model/food.dart';
 import 'package:api_case/product/model/products.dart';
 import 'package:api_case/product/model/recipes.dart';
@@ -21,10 +20,6 @@ abstract final class IFoodServie {
 
   /// Post Products to the API
   Future<void> postProducts();
-
-  Future<void> postAuthors();
-
-  Future<List<Authors>?> getAuthors();
 
   Future<List<Users>?> getUsers();
 
@@ -64,6 +59,7 @@ final class FoodServiceImpl implements IFoodServie {
   @override
   Future<List<Products>?> getProducts() async {
     final response = await service.get<dynamic>(
+      options: Options(headers: {'cache-control': 'no-cache'}),
       ServiceUrl.products.value,
     );
     if (response.statusCode == HttpStatus.ok) {
@@ -82,7 +78,7 @@ final class FoodServiceImpl implements IFoodServie {
   }
 
   @override
-  Future<void> postProducts() async {
+  Future<bool> postProducts() async {
     final products = Products(
       id: 1,
       title: 'Product 1',
@@ -98,55 +94,14 @@ final class FoodServiceImpl implements IFoodServie {
     );
     if (result.statusCode == HttpStatus.ok) {
       print('Uploaded!');
+      final responseData = result.data;
+      print(responseData);
+
+      return true;
     } else {
-      print('Failed!');
+      print('Failed to upload!');
+      return false;
     }
-  }
-
-  @override
-  Future<void> postAuthors() async {
-    final authors = Authors(
-      title: 'Hasan',
-      content: 'Author 1 content',
-      author: 'Author 1',
-      thumbnail:
-          'http://res.cloudinary.com/df19wl431/image/upload/v1704481465/oaug9q29dov6upsy8hlo.png',
-    );
-
-    try {
-      final response = await service.post<dynamic>(
-        ServiceUrl.authors.value,
-        data: authors.toJson(),
-      );
-      if (response.statusCode == HttpStatus.ok) {
-        print('Uploaded!');
-      } else {
-        print('Failed!');
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  @override
-  Future<List<Authors>?> getAuthors() async {
-    final response = await service.get<dynamic>(
-      ServiceUrl.authors.value,
-    );
-
-    if (response.statusCode == HttpStatus.ok) {
-      final responseData = response.data;
-      if (responseData != null) {
-        if (responseData is List<dynamic>) {
-          final listData = responseData;
-          final authorsList = listData
-              .map((item) => Authors.fromJson(item as Map<String, dynamic>))
-              .toList();
-          return authorsList;
-        }
-      }
-    }
-    return null;
   }
 
   @override
@@ -191,10 +146,8 @@ enum ServiceUrl {
   productsBaseUrl('https://fakestoreapi.com/'),
   products('products'),
   recipes('recipes'),
-  authorsBaseUrl('https://tobetoapi.halitkalayci.com/'),
   usersBaseUrl('https://jsonblob.com/'),
-  users('api/jsonBlob/1170375797302484992'),
-  authors('api/Articles');
+  users('api/jsonBlob/1170375797302484992');
 
   final String value;
 
